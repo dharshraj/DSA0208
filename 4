@@ -1,0 +1,27 @@
+import cv2
+import numpy as np
+from matplotlib import pyplot as plt
+image_path = r'C:\Users\91637\OneDrive\Desktop\sev\Pi2.jpg'
+image = cv2.imread(image_path)
+if image is None:
+    print("❌ Error: Image not found at", image_path)
+    exit()
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+_, binary = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
+kernel = np.ones((5, 5), np.uint8)  # 5x5 square kernel
+dilated = cv2.dilate(binary, kernel, iterations=1)
+plt.figure(figsize=(12, 5))
+plt.subplot(1, 3, 1)
+plt.title('Original Image')
+plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+plt.axis('off')
+plt.subplot(1, 3, 2)
+plt.title('Binary Image')
+plt.imshow(binary, cmap='gray')
+plt.axis('off')
+plt.subplot(1, 3, 3)
+plt.title('Dilated Image')
+plt.imshow(dilated, cmap='gray')
+plt.axis('off')
+plt.tight_layout()
+plt.show()
