@@ -1,0 +1,44 @@
+import numpy as np
+import cv2
+
+def compute_homography_DLT(src_pts, dst_pts):
+    """
+    Computes the homography matrix H using Direct Linear Transformation (DLT)
+    src_pts and dst_pts must be 4x2 arrays (4 point pairs)
+    """
+    assert src_pts.shape[0] >= 4 and dst_pts.shape[0] >= 4, "Need at least 4 point pairs"
+
+    A = []
+    for i in range(len(src_pts)):
+        x, y = src_pts[i][0], src_pts[i][1]
+        x_p, y_p = dst_pts[i][0], dst_pts[i][1]
+        
+        A.append([-x, -y, -1, 0, 0, 0, x*x_p, y*x_p, x_p])
+        A.append([0, 0, 0, -x, -y, -1, x*y_p, y*y_p, y_p])
+
+    A = np.array(A)
+    
+    # Solve Ah = 0 using SVD
+    U, S, Vt = np.linalg.svd(A)
+    h = Vt[-1, :]  # Last row of V^T = eigenvector with smallest singular value
+    H = h.reshape(3, 3)
+    
+    return H / H[-1, -1]  # Normalize
+
+img = cv2.imread("your_image.jpg")
+if img is None:
+    raise IOError("Image not found.")
+
+src_points = np.array([
+    [100, 100],    # top-left
+    [400, 100],    # top-right
+    [100, 400],    # bottom-left
+    [400, 400]     # bottom-right
+], dtype=np.float32)
+
+dst_points = np.array([
+    [0, 0],
+    [300, 0],
+    [0, 300],
+    [300, 300]
+], dtype=np.float32)
