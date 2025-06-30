@@ -1,0 +1,31 @@
+import cv2
+import numpy as np
+
+image = cv2.imread("your_image.jpg")  # Replace with your actual image
+if image is None:
+    raise IOError("Image not found.")
+
+# Source points (in original image)
+pts_src = np.float32([
+    [100, 100],    # top-left
+    [500, 100],    # top-right
+    [100, 400],    # bottom-left
+    [500, 400]     # bottom-right
+])
+
+# Destination points (desired mapping)
+pts_dst = np.float32([
+    [0, 0],
+    [300, 0],
+    [0, 300],
+    [300, 300]
+])
+
+H, status = cv2.findHomography(pts_src, pts_dst)
+
+warped = cv2.warpPerspective(image, H, (300, 300))
+
+cv2.imshow("Original", image)
+cv2.imshow("Warped via Homography", warped)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
