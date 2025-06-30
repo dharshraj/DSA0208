@@ -1,0 +1,17 @@
+import cv2
+import numpy as np
+
+image = cv2.imread("your_image.jpg", cv2.IMREAD_GRAYSCALE)  # Use grayscale
+if image is None:
+    raise IOError("Image not found.")
+
+_, binary = cv2.threshold(image, 127, 255, cv2.THRESH_BINARY)
+
+kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))  # Try (3,3) or (7,7)
+
+gradient = cv2.morphologyEx(binary, cv2.MORPH_GRADIENT, kernel)
+
+cv2.imshow("Original Binary Image", binary)
+cv2.imshow("Morphological Gradient (Edges)", gradient)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
