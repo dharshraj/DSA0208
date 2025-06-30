@@ -1,0 +1,49 @@
+import cv2
+import numpy as np
+
+cap = cv2.VideoCapture(0)  # Use 0 for default camera
+
+if not cap.isOpened():
+    print("Error: Cannot access webcam.")
+    exit()
+
+
+
+src_pts = np.float32([
+    [100, 100],    # top-left
+    [540, 100],    # top-right
+    [100, 380],    # bottom-left
+    [540, 380]     # bottom-right
+])
+
+dst_pts = np.float32([
+    [0, 0],
+    [400, 0],
+    [0, 400],
+    [400, 400]
+])
+
+M = cv2.getPerspectiveTransform(src_pts, dst_pts)
+
+print("Press 'q' to quit.")
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        print("Error reading frame.")
+        break
+
+    # Optional: Resize frame to 640x480 for consistency
+    frame = cv2.resize(frame, (640, 480))
+
+    # Apply perspective transform
+    warped = cv2.warpPerspective(frame, M, (400, 400))
+
+    # Show the original and transformed frame
+    cv2.imshow("Original Video", frame)
+    cv2.imshow("Perspective Transformed Video", warped)
+
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+cap.release()
+cv2.destroyAllWindows()
