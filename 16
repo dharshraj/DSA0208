@@ -1,0 +1,22 @@
+import cv2
+
+# Step 1: Load the image
+image = cv2.imread("your_image.jpg")  # Replace with your image path
+if image is None:
+    raise IOError("Image not found.")
+
+# Step 2: Convert to grayscale (Canny requires a single channel)
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+# Step 3: Apply Gaussian blur (recommended to reduce noise)
+blurred = cv2.GaussianBlur(gray, (5, 5), 1.4)
+
+# Step 4: Perform Canny edge detection
+# Thresholds: low and high values control edge linking
+edges = cv2.Canny(blurred, threshold1=50, threshold2=150)
+
+# Step 5: Display results
+cv2.imshow("Original Image", image)
+cv2.imshow("Canny Edge Detection", edges)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
