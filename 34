@@ -1,0 +1,15 @@
+import cv2
+import numpy as np
+
+image = cv2.imread("your_image.jpg", cv2.IMREAD_GRAYSCALE)
+if image is None:
+    raise IOError("Image not found.")
+
+kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (15, 15))  # Try adjusting size
+
+tophat = cv2.morphologyEx(image, cv2.MORPH_TOPHAT, kernel)
+
+cv2.imshow("Original Image", image)
+cv2.imshow("Top Hat Result", tophat)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
