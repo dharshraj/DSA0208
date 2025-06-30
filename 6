@@ -1,0 +1,32 @@
+import cv2
+
+cap = cv2.VideoCapture('your_video.mp4')  # Replace with your video path
+
+if not cap.isOpened():
+    print("Error: Cannot open video.")
+    exit()
+
+playback_mode = input("Enter mode (normal / slow / fast): ").strip().lower()
+
+if playback_mode == "normal":
+    delay = 25    # ~40 FPS
+elif playback_mode == "slow":
+    delay = 100   # Slower playback (~10 FPS)
+elif playback_mode == "fast":
+    delay = 5     # Faster playback (~200 FPS)
+else:
+    print("Invalid mode. Defaulting to normal.")
+    delay = 25
+
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        break  # Video ended or error
+
+    cv2.imshow('Video Playback', frame)
+
+    if cv2.waitKey(delay) & 0xFF == ord('q'):
+        break
+
+cap.release()
+cv2.destroyAllWindows()
