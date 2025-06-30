@@ -1,0 +1,21 @@
+import cv2
+
+# Step 1: Load the original image
+image = cv2.imread("your_image.jpg")  # Replace with your image path
+
+if image is None:
+    raise IOError("Image not found or path is incorrect.")
+
+# Step 2: Resize (scale down) the image to 50% of original
+smaller = cv2.resize(image, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+
+# Step 3: Resize (scale up) the image to 200% of original
+bigger = cv2.resize(image, None, fx=2.0, fy=2.0, interpolation=cv2.INTER_CUBIC)
+
+# Step 4: Display all images
+cv2.imshow("Original Image", image)
+cv2.imshow("Smaller Image (50%)", smaller)
+cv2.imshow("Bigger Image (200%)", bigger)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
