@@ -1,0 +1,17 @@
+import cv2
+
+image = cv2.imread("your_image.jpg")
+if image is None:
+    raise IOError("Image not found.")
+
+# Format: (x, y, width, height)
+x, y, w, h = 100, 50, 200, 150  # Change these based on your object location
+
+cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+roi = image[y:y + h, x:x + w]
+
+cv2.imshow("Original Image with Rectangle", image)
+cv2.imshow("Extracted Object (ROI)", roi)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
