@@ -1,0 +1,26 @@
+import cv2
+import numpy as np
+image_path = r'C:\Users\91637\OneDrive\Desktop\sev\Pi4.jpg'
+img = cv2.imread(image_path)
+if img is None:
+    print(" Error: Image not found at", image_path)
+    exit()
+rows, cols = img.shape[:2]
+src_points = np.float32([
+    [100, 100],     
+    [cols - 100, 80], 
+    [80, rows - 100],  
+    [cols - 120, rows - 80]  
+])
+dst_points = np.float32([
+    [0, 0],              
+    [cols - 1, 0],       
+    [0, rows - 1],       
+    [cols - 1, rows - 1] 
+])
+matrix = cv2.getPerspectiveTransform(src_points, dst_points)
+warped_img = cv2.warpPerspective(img, matrix, (cols, rows))
+cv2.imshow('Original Image', img)
+cv2.imshow('Perspective Transformed Image', warped_img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
