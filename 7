@@ -1,0 +1,38 @@
+import cv2
+
+cap = cv2.VideoCapture(0)
+
+if not cap.isOpened():
+    print("Error: Cannot access the webcam.")
+    exit()
+
+mode = input("Enter playback mode (normal / slow / fast): ").strip().lower()
+
+if mode == "normal":
+    delay = 25    # ~40 FPS
+elif mode == "slow":
+    delay = 100   # ~10 FPS
+elif mode == "fast":
+    delay = 5     # ~200 FPS
+else:
+    print("Invalid mode. Defaulting to normal.")
+    delay = 25
+
+print("Press 'q' to quit.")
+
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        print("Error: Failed to grab frame.")
+        break
+
+    
+
+    cv2.imshow("Webcam Playback", frame)
+
+    # Delay determines playback speed; waitKey returns key pressed
+    if cv2.waitKey(delay) & 0xFF == ord('q'):
+        break
+
+cap.release()
+cv2.destroyAllWindows()
