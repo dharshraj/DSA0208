@@ -1,0 +1,26 @@
+import cv2
+import numpy as np
+
+image = cv2.imread("your_image.jpg")  # Replace with your image path
+if image is None:
+    raise IOError("Image not found.")
+
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+# This is a sharpening kernel (center is negative)
+laplacian_kernel = np.array([
+    [0,  -1,  0],
+    [-1,  4, -1],
+    [0,  -1,  0]
+], dtype=np.float32)
+
+laplacian_edges = cv2.filter2D(gray, ddepth=cv2.CV_32F, kernel=laplacian_kernel)
+
+sharpened = np.float32(gray) - laplacian_edges
+sharpened = np.clip(sharpened, 0, 255).astype(np.uint8)
+
+cv2.imshow("Original", gray)
+cv2.imshow("Laplacian Edges", cv2.convertScaleAbs(laplacian_edges))
+cv2.imshow("Sharpened Image", sharpened)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
